@@ -1,0 +1,33 @@
+<% const F = (typeof fmt !== 'undefined') ? fmt : (d => new Date(d).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })); %>
+<%- include('header') %>
+<div class="crumb"><a href="/">Trang chủ</a> › <a href="/topics/<%= post.topic_id %>">Chủ đề</a> › Bài viết</div>
+<article class="card art">
+  <h1><%= post.title %></h1>
+  <div class="by">
+    <div class="av"><%= post.username.charAt(0).toUpperCase() %></div>
+    <div><b><%= post.username %></b><div class="muted"><%= F(post.created_at) %></div></div>
+  </div>
+  <p class="body"><%= post.content %></p>
+</article>
+
+<h2 class="sec" style="margin-top:32px">💬 Bình luận (<%= comments.length %>)</h2>
+<% if (comments.length === 0) { %><div class="empty">Chưa có bình luận nào.</div><% } %>
+<% comments.forEach(c => { %>
+  <div class="cm">
+    <div class="av sm"><%= c.username.charAt(0).toUpperCase() %></div>
+    <div class="bub">
+      <b><%= c.username %></b><span class="muted"><%= F(c.created_at) %></span>
+      <div><%= c.content %></div>
+    </div>
+  </div>
+<% }) %>
+<% if (user) { %>
+  <form class="card" style="margin-top:20px" method="post" action="/posts/<%= post.id %>/comments">
+    <h3>Viết bình luận</h3>
+    <textarea name="content" rows="3" placeholder="Nội dung bình luận" required></textarea>
+    <button class="btn">Gửi bình luận</button>
+  </form>
+<% } else { %>
+  <div class="card" style="margin-top:20px"><a href="/login">Đăng nhập</a> để bình luận.</div>
+<% } %>
+<%- include('footer') %>

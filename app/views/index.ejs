@@ -1,0 +1,71 @@
+<% const F = (typeof fmt !== 'undefined') ? fmt : (d => new Date(d).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })); %>
+<% const hasRecent = (typeof recent !== 'undefined'); const R = hasRecent ? recent : []; %>
+<% const total = topics.reduce((s, t) => s + Number(t.post_count), 0); %>
+<%- include('header') %>
+<div class="hero">
+  <h1>Cộng đồng thảo luận</h1>
+  <p>Nơi mọi người cùng đặt câu hỏi, chia sẻ kinh nghiệm và trao đổi kiến thức.</p>
+  <div class="stats">
+    <div class="stat"><b><%= topics.length %></b><span>Chủ đề</span></div>
+    <div class="stat"><b><%= total %></b><span>Bài viết</span></div>
+  </div>
+</div>
+
+<div class="layout">
+  <section>
+    <h2 class="sec">📚 Chủ đề</h2>
+    <% if (topics.length === 0) { %><div class="empty">Chưa có chủ đề nào. Hãy tạo chủ đề đầu tiên!</div><% } %>
+    <div class="grid">
+      <% topics.forEach(t => { %>
+        <a class="tc c<%= t.id % 5 %>" href="/topics/<%= t.id %>">
+          <div class="ti"><%= t.title.charAt(0).toUpperCase() %></div>
+          <h3><%= t.title %></h3>
+          <span class="pill"><%= t.post_count %> bài viết</span>
+          <div class="meta">👤 <%= t.username %> · <%= F(t.created_at) %></div>
+        </a>
+      <% }) %>
+    </div>
+
+    <% if (hasRecent) { %>
+      <h2 class="sec">🔥 Bài viết mới</h2>
+      <% if (R.length === 0) { %><div class="empty">Chưa có bài viết nào.</div><% } %>
+      <% R.forEach(p => { %>
+        <a class="row" href="/posts/<%= p.id %>">
+          <div class="av"><%= p.username.charAt(0).toUpperCase() %></div>
+          <div>
+            <div class="rt"><%= p.title %></div>
+            <div class="muted"><%= p.topic_title %> · <%= p.username %> · <%= p.cmt %> bình luận · <%= F(p.created_at) %></div>
+          </div>
+        </a>
+      <% }) %>
+    <% } %>
+  </section>
+
+  <aside class="side">
+    <% if (user) { %>
+      <form class="card" method="post" action="/topics">
+        <h3>✨ Tạo chủ đề mới</h3>
+        <input name="title" placeholder="Tên chủ đề" required>
+        <button class="btn full">Tạo chủ đề</button>
+      </form>
+    <% } else { %>
+      <div class="card">
+        <h3>👋 Tham gia cộng đồng</h3>
+        <p class="muted">Đăng nhập để tạo chủ đề, đăng bài và bình luận.</p>
+        <a class="btn full" href="/register">Đăng ký ngay</a>
+        <p style="text-align:center;margin:12px 0 0"><a href="/login">Đã có tài khoản? Đăng nhập</a></p>
+      </div>
+    <% } %>
+    <% if (topics.length > 0) { %>
+      <div class="card">
+        <h3>📌 Danh mục</h3>
+        <div class="sl">
+          <% topics.forEach(t => { %>
+            <a href="/topics/<%= t.id %>"><span><%= t.title %></span><small><%= t.post_count %></small></a>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+  </aside>
+</div>
+<%- include('footer') %>

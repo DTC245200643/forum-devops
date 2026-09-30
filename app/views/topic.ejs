@@ -1,0 +1,28 @@
+<% const F = (typeof fmt !== 'undefined') ? fmt : (d => new Date(d).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })); %>
+<%- include('header') %>
+<div class="crumb"><a href="/">Trang chủ</a> › <%= topic.title %></div>
+<div class="ph c<%= topic.id % 5 %>">
+  <h1><%= topic.title %></h1>
+  <span><%= posts.length %> bài viết trong chủ đề này</span>
+</div>
+<% if (posts.length === 0) { %><div class="empty">Chưa có bài viết nào. Hãy là người đăng bài đầu tiên!</div><% } %>
+<% posts.forEach(p => { %>
+  <a class="row" href="/posts/<%= p.id %>">
+    <div class="av"><%= p.username.charAt(0).toUpperCase() %></div>
+    <div>
+      <div class="rt"><%= p.title %></div>
+      <div class="muted"><%= p.username %> · <%= F(p.created_at) %></div>
+    </div>
+  </a>
+<% }) %>
+<% if (user) { %>
+  <form class="card" style="margin-top:28px" method="post" action="/topics/<%= topic.id %>/posts">
+    <h3>✍️ Đăng bài viết</h3>
+    <input name="title" placeholder="Tiêu đề" required>
+    <textarea name="content" rows="6" placeholder="Nội dung bài viết" required></textarea>
+    <button class="btn">Đăng bài</button>
+  </form>
+<% } else { %>
+  <div class="card" style="margin-top:28px"><a href="/login">Đăng nhập</a> để đăng bài viết.</div>
+<% } %>
+<%- include('footer') %>
