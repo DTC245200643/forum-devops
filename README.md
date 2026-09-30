@@ -40,4 +40,10 @@ He thong gom cac thanh phan:
 2. Chay: `docker compose up -d --build`
 3. Truy cap:
    - Dien dan: http://192.168.83.129:3000
-   - phpMyAdmin: http://192.168.83.129:8081
+   - phpMyAdmin: http://192.168.83.129:8081 
+## Nginx
+- Reverse proxy tới app Node.js, HTTPS chứng chỉ tự ký (TLS 1.2/1.3)
+- Security headers: HSTS, X-Frame-Options, X-Content-Type-Options, CSP, Referrer-Policy, Permissions-Policy
+- Ẩn phiên bản Nginx (server_tokens off), đóng cổng 3000 của app
+
+
