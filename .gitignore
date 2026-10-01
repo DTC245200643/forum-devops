@@ -4,3 +4,4 @@ npm-debug.log*
 *.log
 .DS_Store
 nginx/certs/
+monitoring/mysqld-exporter.cnf

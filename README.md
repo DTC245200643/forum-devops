@@ -47,3 +47,12 @@ He thong gom cac thanh phan:
 - Ẩn phiên bản Nginx (server_tokens off), đóng cổng 3000 của app
 
 
+
+## Giam sat (Prometheus + Grafana)
+- Prometheus thu so lieu tu: cAdvisor (container), nginx-prometheus-exporter (web server), mysqld-exporter (database)
+- Grafana: `http://IP-may:3001` (tai khoan admin, mat khau la `GRAFANA_ADMIN_PASSWORD` trong `.env`)
+- Prometheus: `http://IP-may:9090`
+- Phan giam sat nam trong file `docker-compose.monitoring.yml`, duoc ghep tu dong nho bien `COMPOSE_FILE` trong `.env`
+- Mang: Prometheus, Grafana, cAdvisor o mang `default`; hai exporter noi them vao `forum-network` de doc so lieu tu Nginx va MySQL, nen Prometheus/Grafana khong truy cap truc tiep duoc MySQL
+- Truoc khi chay lan dau: `cp .env.example .env` (sua mat khau manh), `bash nginx/gen-cert.sh`, `docker compose up -d mysql`, doi mysql healthy, `bash monitoring/setup-exporter.sh`, roi `docker compose up -d --build`
+- Gioi han bo nho tung container, luu du lieu Prometheus toi da 3 ngay
