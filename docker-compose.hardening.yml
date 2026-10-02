@@ -1,0 +1,49 @@
+services:
+  forum:
+    user: "1000:1000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    networks: !override
+      - frontend
+      - backend
+
+  nginx:
+    security_opt:
+      - no-new-privileges:true
+    networks: !override
+      - frontend
+
+  mysql:
+    security_opt:
+      - no-new-privileges:true
+    networks: !override
+      - backend
+
+  phpmyadmin:
+    security_opt:
+      - no-new-privileges:true
+    networks: !override
+      - frontend
+      - backend
+
+  nginx-exporter:
+    networks: !override
+      - default
+      - frontend
+
+  mysqld-exporter:
+    networks: !override
+      - default
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+    internal: true

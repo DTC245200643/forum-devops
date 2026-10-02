@@ -65,3 +65,12 @@ He thong gom cac thanh phan:
   - `{service="nginx"}`: log truy cap Nginx
   - `{service="nginx"} |~ `" [45][0-9][0-9] ``: cac request loi 4xx/5xx
   - `sum by (service) (rate({container=~"forum-.*"}[1m]))`: toc do sinh log theo dich vu
+
+## Hardening
+- Container non-root: `forum` chay UID 1000, bo toan bo capability (`cap_drop: ALL`), he thong file chi doc (`read_only`), cam leo thang dac quyen (`no-new-privileges`)
+- Cach ly mang: `frontend` (nginx, forum, phpmyadmin) va `backend` (forum, mysql, phpmyadmin) la mang `internal`; MySQL khong co duong ra Internet, Nginx khong noi truc tiep toi MySQL
+- Mat khau manh: sinh ngau nhien bang `openssl rand`, toi thieu 20 ky tu, luu trong `.env` (khong dua len GitHub); doi mat khau ung dung bang `security/rotate-app-password.sh`
+- Han che quyen database: user ung dung chi `SELECT, INSERT, UPDATE, DELETE` tren database cua ung dung, khoa root dang nhap tu xa (`security/harden-db.sh`); user `exporter` chi doc thong ke
+- Security headers Nginx: HSTS, X-Frame-Options, X-Content-Type-Options, CSP, Referrer-Policy, Permissions-Policy; an phien ban Nginx va header X-Powered-By
+- Kiem tra: `bash security/audit.sh`
+- Phan hardening nam trong `docker-compose.hardening.yml`, ghep nho bien `COMPOSE_FILE`
