@@ -56,3 +56,12 @@ He thong gom cac thanh phan:
 - Mang: Prometheus, Grafana, cAdvisor o mang `default`; hai exporter noi them vao `forum-network` de doc so lieu tu Nginx va MySQL, nen Prometheus/Grafana khong truy cap truc tiep duoc MySQL
 - Truoc khi chay lan dau: `cp .env.example .env` (sua mat khau manh), `bash nginx/gen-cert.sh`, `docker compose up -d mysql`, doi mysql healthy, `bash monitoring/setup-exporter.sh`, roi `docker compose up -d --build`
 - Gioi han bo nho tung container, luu du lieu Prometheus toi da 3 ngay
+
+## Log tap trung (Loki + Promtail)
+- Promtail doc log cac container (qua docker.sock), day sang Loki; Grafana xem log qua data source Loki
+- Phan log nam trong file `docker-compose.logging.yml`, duoc ghep nho bien `COMPOSE_FILE` trong `.env`
+- Loki khong mo cong ra ngoai; log giu 72 gio
+- Truy van LogQL mau (Grafana > Explore > chon Loki):
+  - `{service="nginx"}`: log truy cap Nginx
+  - `{service="nginx"} |~ `" [45][0-9][0-9] ``: cac request loi 4xx/5xx
+  - `sum by (service) (rate({container=~"forum-.*"}[1m]))`: toc do sinh log theo dich vu
